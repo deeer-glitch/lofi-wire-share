@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>선물하기 와이어프레임 모음</title>
+<style>
+:root {
+  --ink: #1f2225; --sub: #6b7177; --line: #d7dbe0; --line2: #e7eaee;
+  --bg: #f4f5f7; --card: #fff; --chip: #eef0f3; --chipOn: #2b2f33;
+  --accent: #2f6fde; --accentBg: #eaf1fc;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+  -webkit-font-smoothing: antialiased; line-height: 1.5;
+}
+.page { max-width: 1280px; margin: 0 auto; padding: 32px 24px 60px; }
+h1 { font-size: 21px; margin: 0 0 4px; letter-spacing: -.01em; }
+.meta { font-size: 13px; color: var(--sub); margin-bottom: 20px; }
+.meta b { color: var(--ink); font-weight: 600; }
+.lofi-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .05em; color: var(--sub); border: 1px solid var(--line); border-radius: 4px; padding: 2px 7px; margin-left: 8px; vertical-align: middle; }
+
+.tabbar { display: flex; gap: 6px; margin-bottom: 16px; border-bottom: 1px solid var(--line); }
+.tab-btn {
+  font-size: 13px; font-weight: 600; color: var(--sub); background: transparent;
+  border: 0; padding: 10px 16px; cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.tab-btn:hover { color: var(--ink); }
+.tab-btn.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+.frame-wrap {
+  background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+  overflow: hidden; height: 82vh;
+}
+.tabpanel { display: none; width: 100%; height: 100%; }
+.tabpanel.active { display: block; }
+.tabpanel iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+.footnote { font-size: 11.5px; color: var(--sub); margin-top: 18px; }
+.footnote b { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>선물하기 와이어프레임 모음<span class="lofi-tag">LO-FI</span></h1>
+  <div class="meta">PRD-[커머스]-[2026H2]-선물하기 <b>v0.9</b> (2026-07-08) 기준, 탭으로 3종 묶음</div>
+
+  <div class="tabbar">
+    <button class="tab-btn active" data-tab="mvp">MVP 플로우</button>
+    <button class="tab-btn" data-tab="idea">아이디어 요약</button>
+    <button class="tab-btn" data-tab="event">오픈 기념 이벤트</button>
+  </div>
+
+  <div class="frame-wrap">
+    <div class="tabpanel active" id="panel-mvp">
+      <iframe src="gift-mvp-flow-fullpage.html" title="MVP 플로우"></iframe>
+    </div>
+    <div class="tabpanel" id="panel-idea">
+      <iframe src="gift-idea-summary-compare.html" title="아이디어 요약"></iframe>
+    </div>
+    <div class="tabpanel" id="panel-event">
+      <iframe src="gift-open-event-compare.html" title="오픈 기념 이벤트"></iframe>
+    </div>
+  </div>
+
+  <div class="footnote"><b>구성</b>: MVP 플로우 (배송지 없이 주문하기), 아이디어 요약 (바이럴, 리텐션 5개), 오픈 기념 이벤트 (1차 큐레이션, 2차 인증). 상품, 카피, 가격은 더미 데이터입니다.<div style="margin-top:10px;padding:8px 12px;background:#fff8e1;border:1px solid #f0d469;border-radius:6px;font-size:11.5px;color:#7a5a08;">⚠️ 공유용 — 민감 정보 마스킹됨. 카피·색·데이터 더미. 내부 SSOT와 다를 수 있음.</div></div>
+</div>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+      document.querySelectorAll('.tabpanel').forEach(function (p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>선물하기 오픈 기념 이벤트 Lo-fi 와이어프레임</title>
+<style>
+/* ========================================================================
+   lofi-wire component library (inline)
+   ======================================================================== */
+:root {
+  --ink: #1f2225; --sub: #6b7177; --line: #d7dbe0; --line2: #e7eaee;
+  --bg: #f4f5f7; --card: #fff; --ph: #dde1e6; --ph2: #e9ecf0;
+  --chip: #eef0f3; --chipOn: #2b2f33; --note: #f0f2f5;
+  --accent: #2f6fde; --accentBg: #eaf1fc;
+  --pink: #ff4d8a; --dark: #0d0e10;
+  --warn: #fdeecf; --warnInk: #7a5a08;
+  --good: #e8f3ec; --goodInk: #1f6b3a;
+  --bad: #fbeaea; --badInk: #8a3a3a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+  -webkit-font-smoothing: antialiased; line-height: 1.5;
+}
+.page { max-width: 1240px; margin: 0 auto; padding: 32px 24px 80px; }
+.cols { display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start; }
+.col { flex: 1; min-width: 300px; }
+h1 { font-size: 21px; margin: 0 0 4px; letter-spacing: -.01em; }
+.meta { font-size: 13px; color: var(--sub); margin-bottom: 6px; }
+.meta b { color: var(--ink); font-weight: 600; }
+.lofi-tag {
+  display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .05em;
+  color: var(--sub); border: 1px solid var(--line); border-radius: 4px;
+  padding: 2px 7px; margin-left: 8px; vertical-align: middle;
+}
+.section-title { font-size: 14px; font-weight: 700; margin: 28px 0 12px; letter-spacing: -.005em; }
+.col-label { font-size: 12px; font-weight: 700; color: var(--sub); text-transform: uppercase; letter-spacing: .06em; margin: 0 0 6px; }
+.col-sub { font-size: 11.5px; color: var(--sub); margin: 0 0 10px; }
+.opt-tag { display: inline-block; font-size: 10px; font-weight: 700; background: var(--accentBg); color: #234a86; border-radius: 4px; padding: 2px 6px; margin-right: 6px; vertical-align: middle; }
+.opt-tag.two { background: var(--good); color: var(--goodInk); }
+
+.device { background: var(--card); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; box-shadow: 0 6px 24px rgba(31,34,37,.06); max-width: 380px; position: relative; }
+.statusbar { height: 34px; background: #fbfbfc; border-bottom: 1px solid var(--line2); display: flex; align-items: center; justify-content: center; }
+.statusbar span { width: 90px; height: 5px; border-radius: 3px; background: var(--ph); }
+.screen { padding: 0 0 16px; }
+
+.kv { background: var(--dark); color: #fff; padding: 28px 20px 26px; text-align: center; }
+.kv-chip { display: inline-block; background: #22242a; color: #fff; font-size: 11px; padding: 4px 11px; border-radius: 14px; margin-bottom: 12px; }
+.kv-title { font-size: 18px; font-weight: 800; letter-spacing: -.01em; margin: 0 0 8px; line-height: 1.35; }
+.kv-sub { font-size: 12px; color: #b7bac0; margin-bottom: 16px; }
+.kv-cta { display: inline-block; background: var(--accent); color: #fff; border: 0; padding: 10px 22px; border-radius: 9px; font-size: 13px; font-weight: 700; }
+
+.sec-head-wrap { padding: 16px 16px 0; }
+.sec-head { font-size: 14.5px; font-weight: 700; margin: 0 0 2px; }
+.sec-sub { font-size: 11.5px; color: var(--sub); margin: 0 0 10px; }
+
+.chips { display: flex; gap: 7px; overflow-x: auto; padding: 4px 16px 10px; }
+.chip { flex: 0 0 auto; font-size: 12px; padding: 6px 12px; border-radius: 16px; background: var(--chip); color: var(--sub); white-space: nowrap; }
+.chip.on { background: var(--chipOn); color: #fff; font-weight: 600; }
+
+.carousel { display: flex; gap: 8px; overflow-x: auto; padding: 8px 16px 4px; }
+.thumb { width: 138px; height: 110px; border-radius: 10px; background: repeating-linear-gradient(45deg, var(--ph2), var(--ph2) 9px, var(--ph) 9px, var(--ph) 10px); display: flex; align-items: center; justify-content: center; color: var(--sub); font-size: 10px; margin-bottom: 6px; position: relative; }
+
+.post-card { flex: 0 0 138px; }
+.post-user { font-size: 10px; color: var(--sub); margin-bottom: 2px; }
+.post-title { font-size: 11.5px; line-height: 1.3; height: 28px; overflow: hidden; margin-bottom: 5px; }
+.post-stat { font-size: 10px; color: var(--sub); }
+.post-badge { position: absolute; top: 6px; left: 6px; background: rgba(13,14,16,.72); color: #fff; font-size: 9.5px; padding: 2px 6px; border-radius: 5px; }
+
+.modebanner { background: var(--accentBg); border-radius: 10px; padding: 9px 11px; font-size: 11.5px; color: #234a86; margin: 12px 16px 4px; display: flex; align-items: center; gap: 7px; }
+.modebanner .ic { width: 16px; height: 16px; border-radius: 5px; background: #cfe0fb; flex-shrink: 0; }
+
+.upload-box { margin: 12px 16px 6px; background: var(--note); border: 1px dashed var(--line); border-radius: 12px; padding: 20px 14px; text-align: center; }
+.upload-icon { font-size: 24px; margin-bottom: 6px; }
+.upload-msg { font-size: 12px; font-weight: 600; margin-bottom: 3px; }
+.upload-sub { font-size: 10.5px; color: var(--sub); margin-bottom: 10px; }
+.upload-btn { padding: 8px 18px; border-radius: 8px; font-size: 11.5px; font-weight: 600; border: 1px solid var(--ink); background: #fff; color: var(--ink); }
+
+.reward-note { margin: 12px 16px 0; font-size: 10.5px; color: var(--sub); background: var(--warn); color: var(--warnInk); padding: 8px 10px; border-radius: 8px; }
+
+.anno { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
+.anno h3 { font-size: 13px; margin: 0 0 8px; display: flex; align-items: center; gap: 7px; }
+.anno h3 .n { font-size: 10px; font-weight: 700; background: var(--ink); color: #fff; border-radius: 5px; padding: 2px 6px; letter-spacing: .03em; }
+.anno ul { margin: 0; padding-left: 18px; font-size: 12.5px; color: #3a3f44; }
+.anno li { margin-bottom: 5px; }
+.anno li b { color: var(--ink); }
+.pill { display: inline-block; font-size: 10.5px; font-weight: 600; background: var(--chip); color: var(--sub); border-radius: 5px; padding: 1px 6px; margin: 0 1px; }
+.pill.cf { background: var(--bad); color: var(--badInk); }
+.pill.dec { background: var(--warn); color: var(--warnInk); }
+
+.compare { width: 100%; border-collapse: collapse; font-size: 12px; }
+.compare th, .compare td { border: 1px solid var(--line2); padding: 8px 10px; text-align: left; vertical-align: top; }
+.compare th { background: var(--note); color: var(--sub); font-weight: 600; font-size: 11.5px; }
+.compare td b { color: var(--ink); }
+
+.footnote { font-size: 11.5px; color: var(--sub); margin-top: 26px; border-top: 1px solid var(--line); padding-top: 14px; }
+.footnote b { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>선물하기 오픈 기념 이벤트 (1차 큐레이션, 2차 인증)<span class="lofi-tag">LO-FI</span></h1>
+  <div class="meta">PRD-[커머스]-[2026H2]-선물하기 <b>v0.9</b> (2026-07-08), PO 기준, 회의록 아이디어 시각화</div>
+
+  <p class="section-title">1차, 2차 이벤트 구조 비교</p>
+
+  <div class="cols">
+
+    <!-- 1차 이벤트 -->
+    <div class="col" style="max-width:380px;">
+      <p class="col-label"><span class="opt-tag">1차</span> 선물 추천 큐레이션 이벤트</p>
+      <p class="col-sub">커뮤니티에서 상황별 선물을 서로 추천, 채택 글에 리워드</p>
+      <div class="device">
+        <div class="statusbar"><span></span></div>
+        <div class="screen">
+          <div class="kv">
+            <div class="kv-chip">선물하기 OPEN 기념</div>
+            <div class="kv-title">이럴 땐 무슨 선물이<br>좋을까요?</div>
+            <div class="kv-sub">상황을 남기면 커뮤니티가 추천해줘요</div>
+            <button class="kv-cta">선물 고민 글쓰기</button>
+          </div>
+
+          <div class="sec-head-wrap">
+            <p class="sec-head">지금 뜨는 선물 고민</p>
+            <p class="sec-sub">상황별로 둘러보기</p>
+          </div>
+
+          <div class="chips">
+            <div class="chip on">전체</div>
+            <div class="chip">집들이</div>
+            <div class="chip">생일</div>
+            <div class="chip">이사</div>
+            <div class="chip">취업 축하</div>
+          </div>
+
+          <div class="carousel">
+            <div class="post-card">
+              <div class="thumb" style="position:relative;">사진<span class="post-badge">집들이</span></div>
+              <div class="post-user">@방구석인테리어</div>
+              <div class="post-title">신혼집 집들이 뭐가 좋을까요</div>
+              <div class="post-stat">추천 128, 댓글 12</div>
+            </div>
+            <div class="post-card">
+              <div class="thumb" style="position:relative;">사진<span class="post-badge">생일</span></div>
+              <div class="post-user">@오늘의룸메</div>
+              <div class="post-title">룸메 생일선물 고민중</div>
+              <div class="post-stat">추천 96, 댓글 8</div>
+            </div>
+            <div class="post-card">
+              <div class="thumb" style="position:relative;">사진<span class="post-badge">이사</span></div>
+              <div class="post-user">@집꾸미기초보</div>
+              <div class="post-title">첫 자취 이사 선물 뭐가 좋을지</div>
+              <div class="post-stat">추천 61, 댓글 5</div>
+            </div>
+          </div>
+
+          <div class="reward-note">채택된 추천 댓글에는 적립금을 드려요</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2차 이벤트 -->
+    <div class="col" style="max-width:380px;">
+      <p class="col-label"><span class="opt-tag two">2차</span> 받은 선물, 보낸 선물 인증 이벤트</p>
+      <p class="col-sub">선물하기로 실제 주문 완료한 유저만 참여 가능</p>
+      <div class="device">
+        <div class="statusbar"><span></span></div>
+        <div class="screen">
+          <div class="kv">
+            <div class="kv-chip">선물 인증 이벤트</div>
+            <div class="kv-title">받은 선물, 보낸 선물<br>자랑해주세요</div>
+            <div class="kv-sub">인증하면 추첨으로 리워드를 드려요</div>
+            <button class="kv-cta">인증하기</button>
+          </div>
+
+          <div class="modebanner">
+            <span class="ic"></span>
+            <span>선물하기로 주문을 완료한 분만 인증할 수 있어요</span>
+          </div>
+
+          <div class="chips">
+            <div class="chip on">전체</div>
+            <div class="chip">보낸 선물</div>
+            <div class="chip">받은 선물</div>
+          </div>
+
+          <div class="upload-box">
+            <div class="upload-icon">📷</div>
+            <div class="upload-msg">선물 사진과 후기를 올려주세요</div>
+            <div class="upload-sub">보낸 선물 / 받은 선물 중 선택</div>
+            <button class="upload-btn">사진 올리기</button>
+          </div>
+
+          <div class="carousel">
+            <div class="post-card">
+              <div class="thumb" style="position:relative;">사진<span class="post-badge">받은 선물</span></div>
+              <div class="post-user">@소소한하루</div>
+              <div class="post-title">생일에 받은 무드등 완전 취향저격</div>
+              <div class="post-stat">좋아요 214</div>
+            </div>
+            <div class="post-card">
+              <div class="thumb" style="position:relative;">사진<span class="post-badge">보낸 선물</span></div>
+              <div class="post-user">@우리집공방</div>
+              <div class="post-title">친구 결혼 선물로 보낸 홈세트</div>
+              <div class="post-stat">좋아요 132</div>
+            </div>
+          </div>
+
+          <div class="reward-note">매주 추첨으로 적립금 또는 상품권 지급 (안)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="section-title">1차 vs 2차 비교</p>
+  <div class="anno">
+    <table class="compare">
+      <tr>
+        <th>관점</th>
+        <th>1차. 선물 추천 큐레이션</th>
+        <th>2차. 선물 인증</th>
+      </tr>
+      <tr>
+        <td><b>목적</b></td>
+        <td>선물하기 오픈 인지, 상황별 선물 아이디어 확보</td>
+        <td>실사용 후기 축적, 실사용 신뢰 콘텐츠 확보</td>
+      </tr>
+      <tr>
+        <td><b>참여 시점</b></td>
+        <td>선물하기 오픈 직후 (선주문 여부 무관)</td>
+        <td>선물 수령 또는 발송 완료 이후</td>
+      </tr>
+      <tr>
+        <td><b>참여 조건</b></td>
+        <td>제한 없음 (전체 유저)</td>
+        <td>선물하기 실주문 완료 유저만 (order_id 검증)</td>
+      </tr>
+      <tr>
+        <td><b>핵심 액션</b></td>
+        <td>상황 글쓰기 / 추천 댓글 달기</td>
+        <td>사진 + 후기 업로드</td>
+      </tr>
+      <tr>
+        <td><b>리워드(안)</b></td>
+        <td>채택 댓글 적립금</td>
+        <td>추첨 적립금 또는 상품권</td>
+      </tr>
+    </table>
+  </div>
+
+  <p class="section-title">참고 및 미확정</p>
+  <div class="cols">
+    <div class="col" style="min-width:320px;">
+      <div class="anno">
+        <h3><span class="n">A1</span> 이벤트 구조</h3>
+        <ul>
+          <li>1차는 <b>오픈 시점 원샷 캠페인</b>으로 시작, 2차는 <b>1차 이후 수령/발송 완료 유저 대상</b>으로 순차 진행.</li>
+          <li>1차는 참여 제한 없이 커뮤니티 전체가 대상, 2차는 <b>선물하기 실주문 완료 유저</b>로 좁혀 어뷰징을 방지.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col" style="min-width:320px;">
+      <div class="anno">
+        <h3><span class="n">A2</span> 미확정 사항</h3>
+        <ul>
+          <li><span class="pill cf">CF</span> 리워드 형태 (적립금 vs 쿠폰 vs 추첨) 및 예산.</li>
+          <li><span class="pill cf">CF</span> 반응 좋을 시 2차를 상시 콘텐츠 연계 구조로 전환할지 여부.</li>
+          <li><span class="pill dec">DEC</span> 1차 → 2차 전환 유도 방식 (알림 등).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <b>참고 자료</b>: PRD-[커머스]-[2026H2]-선물하기 v0.9 (2026-07-08, PO).
+    <b>SSOT</b>: 로컬 PRD (PD Downloads).
+    <b>미확정</b>: 리워드 형태 및 예산, 상시 전환 여부, 1차와 2차 전환 유도 방식.
+    <b>상품, 후기, 카피, 유저명은 더미 데이터입니다.</b>
+  <div style="margin-top:10px;padding:8px 12px;background:#fff8e1;border:1px solid #f0d469;border-radius:6px;font-size:11.5px;color:#7a5a08;">⚠️ 공유용 — 민감 정보 마스킹됨. 카피·색·데이터 더미. 내부 SSOT와 다를 수 있음.</div></div>
+</div>
+</body>
+</html>

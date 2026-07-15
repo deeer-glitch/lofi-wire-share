@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>선물하기 MVP 주문 플로우 Lo-fi 와이어프레임</title>
+<style>
+:root {
+  --ink: #1f2225; --sub: #6b7177; --line: #d7dbe0; --line2: #e7eaee;
+  --bg: #f4f5f7; --card: #fff; --ph: #dde1e6; --ph2: #e9ecf0;
+  --chip: #eef0f3; --chipOn: #2b2f33; --note: #f0f2f5;
+  --accent: #2f6fde; --accentBg: #eaf1fc;
+  --dark: #0d0e10;
+  --warn: #fdeecf; --warnInk: #7a5a08;
+  --good: #e8f3ec; --goodInk: #1f6b3a;
+  --bad: #fbeaea; --badInk: #8a3a3a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif;
+  -webkit-font-smoothing: antialiased; line-height: 1.5;
+}
+.page { max-width: 1400px; margin: 0 auto; padding: 32px 24px 80px; }
+h1 { font-size: 21px; margin: 0 0 4px; letter-spacing: -.01em; }
+.meta { font-size: 13px; color: var(--sub); margin-bottom: 6px; }
+.meta b { color: var(--ink); font-weight: 600; }
+.lofi-tag { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .05em; color: var(--sub); border: 1px solid var(--line); border-radius: 4px; padding: 2px 7px; margin-left: 8px; vertical-align: middle; }
+.section-title { font-size: 14px; font-weight: 700; margin: 28px 0 12px; letter-spacing: -.005em; }
+
+/* flow row */
+.flow-row { display: flex; align-items: flex-start; gap: 6px; overflow-x: auto; padding: 6px 2px 20px; }
+.flow-item { flex: 0 0 auto; width: 232px; }
+.flow-arrow { flex: 0 0 auto; width: 22px; display: flex; align-items: center; justify-content: center; padding-top: 170px; color: var(--sub); font-size: 16px; }
+.step-tag { font-size: 11px; font-weight: 700; color: #234a86; background: var(--accentBg); border-radius: 5px; padding: 3px 8px; display: inline-block; margin-bottom: 6px; }
+.step-title { font-size: 12.5px; font-weight: 700; margin: 0 0 8px; line-height: 1.35; min-height: 32px; }
+
+.device { background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; box-shadow: 0 6px 20px rgba(31,34,37,.06); width: 232px; position: relative; }
+.statusbar { height: 26px; background: #fbfbfc; border-bottom: 1px solid var(--line2); display: flex; align-items: center; justify-content: center; }
+.statusbar span { width: 60px; height: 4px; border-radius: 3px; background: var(--ph); }
+.screen { padding: 0 0 10px; min-height: 300px; }
+
+.prod-thumb { height: 130px; background: repeating-linear-gradient(45deg, var(--ph2), var(--ph2) 9px, var(--ph) 9px, var(--ph) 10px); display: flex; align-items: center; justify-content: center; color: var(--sub); font-size: 10px; }
+.prod-info { padding: 8px 10px; }
+.bar { height: 9px; border-radius: 4px; background: var(--ph2); margin-bottom: 6px; }
+.bar.w60 { width: 60%; } .bar.w40 { width: 40%; }
+.prod-price { font-size: 13px; font-weight: 700; margin: 4px 0 2px; }
+
+.cta-row { display: flex; gap: 6px; padding: 8px 10px 10px; }
+.cta-btn { flex: 1; height: 30px; border-radius: 7px; font-size: 10.5px; font-weight: 700; border: 1px solid var(--ink); background: #fff; color: var(--ink); display: flex; align-items: center; justify-content: center; text-align: center; }
+.cta-btn.solid { background: var(--ink); color: #fff; border-color: var(--ink); }
+.cta-btn.gift { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.sheet-dim { background: rgba(13,14,16,.35); display: flex; flex-direction: column; justify-content: flex-end; min-height: 300px; }
+.sheet { background: #fff; border-radius: 14px 14px 0 0; padding: 12px 10px; }
+.sheet-title { font-size: 11.5px; font-weight: 700; margin-bottom: 8px; }
+.opt-chip-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+.opt-chip { font-size: 10px; padding: 5px 9px; border-radius: 12px; background: var(--chip); color: var(--sub); }
+.opt-chip.on { background: var(--chipOn); color: #fff; font-weight: 600; }
+
+.form-block { padding: 10px 10px 4px; }
+.form-label { font-size: 10px; color: var(--sub); margin-bottom: 4px; }
+.form-input { height: 28px; border: 1px solid var(--line); border-radius: 6px; background: #fbfbfc; margin-bottom: 10px; display: flex; align-items: center; padding: 0 8px; font-size: 10.5px; color: var(--ph); }
+.form-box { border: 1px solid var(--line); border-radius: 8px; padding: 8px; margin-bottom: 10px; font-size: 10.5px; color: var(--sub); }
+.info-banner { background: var(--accentBg); color: #234a86; font-size: 10px; border-radius: 7px; padding: 7px 8px; margin-bottom: 10px; line-height: 1.4; }
+.pay-btn { margin: 0 10px; height: 32px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+.done-wrap { padding: 20px 14px 6px; text-align: center; }
+.done-check { width: 36px; height: 36px; border-radius: 50%; background: var(--good); color: var(--goodInk); font-size: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; }
+.done-msg { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+.done-sub { font-size: 10px; color: var(--sub); margin-bottom: 12px; }
+.share-card { border: 1px solid var(--line); border-radius: 10px; padding: 10px; margin: 0 10px 8px; }
+.share-row { display: flex; gap: 6px; }
+.share-btn { flex: 1; height: 30px; border-radius: 7px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.share-btn.kakao { background: #fdd835; color: #3a2e00; }
+.share-btn.link { background: var(--chip); color: var(--ink); }
+.status-note { font-size: 10px; color: var(--warnInk); background: var(--warn); border-radius: 6px; padding: 6px 8px; margin: 0 10px; }
+
+.kakao-msg { margin: 16px 10px; background: #fee500; border-radius: 12px; padding: 10px; }
+.kakao-from { font-size: 10px; color: #5b4a00; margin-bottom: 6px; }
+.kakao-card { background: #fff; border-radius: 8px; padding: 8px; }
+.kakao-card .bar { background: var(--ph2); }
+.kakao-cta { margin-top: 6px; height: 26px; border-radius: 6px; background: #3a2e00; color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.receive-wrap { padding: 4px 10px; }
+.receive-msg { font-size: 11px; font-weight: 700; margin: 8px 0 4px; }
+.receive-btn { margin-top: 8px; height: 30px; border-radius: 7px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.no-login { font-size: 9.5px; color: var(--sub); text-align: center; margin-top: 6px; }
+
+.anno { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 14px; }
+.anno h3 { font-size: 13px; margin: 0 0 8px; display: flex; align-items: center; gap: 7px; }
+.anno h3 .n { font-size: 10px; font-weight: 700; background: var(--ink); color: #fff; border-radius: 5px; padding: 2px 6px; letter-spacing: .03em; }
+.anno ul { margin: 0; padding-left: 18px; font-size: 12.5px; color: #3a3f44; }
+.anno li { margin-bottom: 5px; }
+.anno li b { color: var(--ink); }
+.pill { display: inline-block; font-size: 10.5px; font-weight: 600; background: var(--chip); color: var(--sub); border-radius: 5px; padding: 1px 6px; margin: 0 1px; }
+.pill.cf { background: var(--bad); color: var(--badInk); }
+.pill.dec { background: var(--warn); color: var(--warnInk); }
+.cols { display: flex; gap: 24px; flex-wrap: wrap; }
+.col { flex: 1; min-width: 320px; }
+
+.footnote { font-size: 11.5px; color: var(--sub); margin-top: 26px; border-top: 1px solid var(--line); padding-top: 14px; }
+.footnote b { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>선물하기 MVP 주문 플로우 (배송지 없이 주문하기)<span class="lofi-tag">LO-FI</span></h1>
+  <div class="meta">PRD-[커머스]-[2026H2]-선물하기 <b>v0.9</b> (2026-07-08, PO 기준), Phase 1 스코프</div>
+
+  <p class="section-title">보내는 사람 플로우 (Epic 1, 2.1)</p>
+
+  <div class="flow-row">
+
+    <div class="flow-item">
+      <span class="step-tag">STEP 1</span>
+      <p class="step-title">PDP, 선물하기 진입</p>
+      <div class="device">
+        <div class="statusbar"><span></span></div>
+        <div class="screen">
+          <div class="prod-thumb">상품 이미지</div>
+          <div class="prod-info">
+            <div class="bar w60"></div>
+            <div class="bar w40"></div>
+            <div class="prod-price">89,000원</div>
+          </div>
+          <div class="cta-row">
+            <div class="cta-btn">구매하기</div>
+            <div class="cta-btn gift">선물하기</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">&rarr;</div>
+
+    <div class="flow-item">
+      <span class="step-tag">STEP 2</span>
+      <p class="step-title">옵션 선택 바텀시트</p>
+      <div class="device">
+        <div class="statusbar"><span></span></div>
+        <div class="screen sheet-dim">
+          <div class="sheet">
+            <div class="sheet-title">옵션을 선택해주세요</div>
+            <div class="opt-chip-row">
+              <div class="opt-chip on">화이트</div>
+              <div class="opt-chip">그레이</div>
+            </div>
+            <div class="opt-chip-row">
+              <div class="opt-chip on">One Size</div>
+            </div>
+            <div class="cta-row" style="padding:4px 0 0;">
+              <div class="cta-btn gift" style="flex:1;">선물하기</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">&rarr;</div>
+
+    <div class="flow-item">
+      <span class="step-tag">STEP 3</span>
+      <p class="step-title">주문서, 배송지 없이 결제</p>
+      <div class="device">
+        <div class="statusbar"><span></span></div>
+        <div class="screen">
+          <div class="form-block">
+            <div class="form-label">받는 사람 이름</div>
+            <div class="form-input">이름을 입력해주세요</div>
+            <div class="form-label">선물 메시지 카드</div>
+            <div class="form-box">카드 디자인 선택, 메시지 작성</div>
+            <div class="info-banner">배송지는 받는 분이 직접 입력해요</div>
+          </div>
+          <div class="pay-btn">89,000원 결제하기</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">&rarr;</div>
+
+    <div class="flow-item">
+      <span class="step-tag">STEP 4</span>
+      <p class="step-title">주문완료, 선물 전달</p>
+      <div class="device">
+        <div class="statusbar"><span></span></div>
+        <div class="screen">
+          <div class="done-wrap">
+            <div class="done-check">&#10003;</div>
+            <div class="done-msg">주문이 완료됐어요</div>
+            <div class="done-sub">친구에게 선물을 보내주세요</div>
+          </div>
+          <div class="share-card">
+            <div class="share-row">
+              <div class="share-btn kakao">카카오톡 보내기</div>
+            </div>
+            <div class="share-row" style="margin-top:6px;">
+              <div class="share-btn link">링크 복사</div>
+            </div>
+          </div>
+          <div class="status-note">받는 분의 배송지 입력을 기다리는 중</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">&rarr;</div>
+
+    <div class="flow-item">
+      <span class="step-tag">STEP 5</span>
+      <p class="step-title">받는 사람, 알림 도착</p>
+      <div class="device">
+        <div class="statusbar"><span></span></div>
+        <div class="screen">
+          <div class="kakao-msg">
+            <div class="kakao-from">오늘의집</div>
+            <div class="kakao-card">
+              <div class="bar w60"></div>
+              <div class="bar w40"></div>
+              <div class="kakao-cta">선물 확인하기</div>
+            </div>
+          </div>
+          <div class="receive-wrap">
+            <div class="receive-msg">선물이 도착했어요</div>
+            <div class="bar w60"></div>
+            <button class="receive-btn">배송지 입력하기</button>
+            <div class="no-login">로그인 없이 받을 수 있어요</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="section-title">참고</p>
+  <div class="cols">
+    <div class="col">
+      <div class="anno">
+        <h3><span class="n">A1</span> Phase 1 Do</h3>
+        <ul>
+          <li>상품 1개, 일반택배 및 선불배송비 상품만 대상.</li>
+          <li>결제 시점은 배송지 입력 전 (<b>선결제</b> 권장, PRD 상 미확정).</li>
+          <li>주문완료 후 옵션 변경 불가, 배송지만 별도로 입력.</li>
+          <li>전달 채널은 카카오톡과 링크 복사만 지원.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col">
+      <div class="anno">
+        <h3><span class="n">A2</span> 미확정, 리스크</h3>
+        <ul>
+          <li><span class="pill cf">CF</span> 선결제와 후결제 중 최종 방식.</li>
+          <li><span class="pill cf">CF</span> 미수락 7일 경과 시 리마인드 발송 여부 (현재 P2, 미작성).</li>
+          <li><span class="pill dec">DEC</span> STEP 5 웹뷰 진입 시 앱 설치 유도 노출 여부.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <b>참고 자료</b>: PRD-[커머스]-[2026H2]-선물하기 v0.9 (2026-07-08, PO).
+    <b>SSOT</b>: 로컬 PRD (PD Downloads).
+    <b>미확정</b>: 선결제와 후결제, 미수락 리마인드 우선순위.
+    <b>상품, 카피, 가격은 더미 데이터입니다.</b>
+  <div style="margin-top:10px;padding:8px 12px;background:#fff8e1;border:1px solid #f0d469;border-radius:6px;font-size:11.5px;color:#7a5a08;">⚠️ 공유용 — 민감 정보 마스킹됨. 카피·색·데이터 더미. 내부 SSOT와 다를 수 있음.</div></div>
+</div>
+</body>
+</html>
